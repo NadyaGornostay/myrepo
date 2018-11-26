@@ -1,0 +1,38 @@
+{% extends 'maintemplate.html' %}
+
+{% load staticfiles %}
+
+{% block OneVideo %}
+
+ <iframe width="853" height="480" src={{ video.Video_url }} frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+    <H1>{{ video.Video_name }}</H1>
+    <h2>{{ video.Video_dis }}</h2>
+    <h3>Дата добавления{{ video.Video_date }}</h3><hr>
+    <img src="{% static 'Like.jpg' %}" width="100" id="like" name="{{ video.id }}"> <h3 id="count_likes"> {{ video.Video_likes }}</h3>
+
+        {% for com in comments %}
+            <i>
+            <h2>{{ com.0.Comment_text }}</h2>
+            <h2>Дата добавления{{ com.0.Comment_data }}</h2>
+                <img src="{% static 'Like.jpg' %}" width="100" id="likecomment" name="{{ comment.id }}"> <h3 id="com_count_likes">{{ com.0.Comment_likes }}</h3>
+            <h2>Комментарий оставил {{ com.1 }}</h2>
+            </i>
+        {% endfor %}
+    <hr>
+
+<h2>
+        {% if user %}
+		<form action="/games/addcomment/{{video.id}}/" method = "post"> {% csrf_token %}{{ form }}
+            <input type="submit" class="button" value="Добавить коментарий">
+        </form>
+        {% else %}
+    <h3>Войдите чтобы оставить комментарий</h3>
+        {% endif %}
+</h2>
+
+{% endblock %}
+
+
+
+<a href="/games/addliketovideo/{{ video.id }}"> <h3><img src="{% static 'Like.jpg' %}" width="100" class="like"> {{ video.Video_likes }}</h3></a>
+<a href="/games/addliketocomment/{{ com.0.id }}"><h2></h2></a>
